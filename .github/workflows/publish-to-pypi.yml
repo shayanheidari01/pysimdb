@@ -1,8 +1,8 @@
 name: Publish Python Package to PyPI
 
 on:
-  push:
-    branches: [ main ]
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -24,32 +24,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install build twine
     
-    - name: Get and increment version
+    - name: Get release version
       id: get_version
       run: |
-        # Get the latest tag or default to 0.1.0
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
-        echo "Latest tag: $LATEST_TAG"
+        # Get version from release tag
+        if [ "${{ github.event_name }}" = "release" ]; then
+          VERSION_TAG="${{ github.event.release.tag_name }}"
+        else
+          # For manual runs, get latest tag or default
+          VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
+        fi
         
         # Remove 'v' prefix if present
-        CURRENT=${LATEST_TAG#v}
-        
-        # Split version into components
-        IFS='.' read -ra VERSION_PARTS <<< "$CURRENT"
-        MAJOR=${VERSION_PARTS[0]:-0}
-        MINOR=${VERSION_PARTS[1]:-0}
-        PATCH=${VERSION_PARTS[2]:-0}
-        
-        # Increment patch version for each upload
-        PATCH=$((PATCH + 1))
-        
-        NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-        echo "Using version: $NEW_VERSION"
-        
-        # Also create the version without 'v' prefix for setup.py
-        VERSION_WITHOUT_V="$MAJOR.$MINOR.$PATCH"
+        VERSION_WITHOUT_V=${VERSION_TAG#v}
         echo "VERSION_WITHOUT_V=$VERSION_WITHOUT_V" >> $GITHUB_ENV
+        echo "Using version: $VERSION_WITHOUT_V"
     
     - name: Update version in setup.py
       run: |
@@ -60,19 +49,6 @@ jobs:
       run: |
         # Update version in pyproject.toml
         sed -i "s/version = \"[^\"]*\"/version = \"$VERSION_WITHOUT_V\"/g" pyproject.toml
-    
-    - name: Commit and push version update
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add setup.py pyproject.toml
-        git commit -m "Bump version to $NEW_VERSION"
-        git push origin main
-    
-    - name: Create new tag
-      run: |
-        git tag $NEW_VERSION
-        git push origin $NEW_VERSION
     
     - name: Build package
       run: |

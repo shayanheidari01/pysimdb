@@ -12,6 +12,11 @@ on:
           - major
           - minor
           - patch
+      prerelease:
+        description: 'Create prerelease?'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   version:
@@ -87,10 +92,15 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add setup.py pyproject.toml
-        git commit -m "Bump version to $NEW_VERSION"
+        git commit -m "Update version to $NEW_VERSION"
         git push origin main
     
-    - name: Create new tag and release
+    - name: Create new tag
+      run: |
+        git tag $NEW_VERSION
+        git push origin $NEW_VERSION
+    
+    - name: Create GitHub Release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -98,4 +108,4 @@ jobs:
         tag_name: ${{ env.NEW_VERSION }}
         release_name: Release ${{ env.NEW_VERSION }}
         draft: false
-        prerelease: false
+        prerelease: ${{ github.event.inputs.prerelease }}
