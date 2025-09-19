@@ -5,7 +5,7 @@ with open("pypi_description.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pysimdb",
-    version="1.0.0",
+    # version will be automatically determined by setuptools-scm
     author="Shayan Heidari",
     author_email="shayanheidari01@gmail.com",
     description="A lightweight, JSON-based database library for Python",
@@ -47,4 +47,6 @@ setuptools.setup(
     },
     keywords="database json database-library python-database lightweight-database",
     license="GNU General Public License v3 (GPLv3)",
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
 )

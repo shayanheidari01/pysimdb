@@ -1,4 +1,9 @@
+# Runtime dependencies
+pysimdjson>=5.0.0
+
 # Development dependencies
 pytest>=6.0
 black
 flake8
+build
+twine
