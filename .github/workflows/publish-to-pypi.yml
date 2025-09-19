@@ -1,8 +1,8 @@
 name: Publish Python Package to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -24,35 +24,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install build twine setuptools-scm
     
-    - name: Get version from git tag
+    - name: Get commit count for version
       id: get_version
       run: |
-        # Extract version from the git tag (removing 'v' prefix if present)
-        TAG_NAME=${GITHUB_REF#refs/tags/}
-        VERSION=${TAG_NAME#v}
+        # Count commits on main branch for automatic versioning
+        COMMIT_COUNT=$(git rev-list --count HEAD)
+        VERSION="0.1.$COMMIT_COUNT"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "Using version: $VERSION"
-    
-    - name: Validate version format
-      run: |
-        # Ensure version is in proper format (no dev suffix for stable releases)
-        if [[ $VERSION == *dev* ]]; then
-          echo "Error: Dev versions should not be published as stable releases"
-          exit 1
-        fi
     
     - name: Update version in setup.py
       run: |
         # Update version in setup.py
         sed -i "s/version=\"[^\"]*\"/version=\"$VERSION\"/g" setup.py
-    
-    - name: Commit version update
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add setup.py
-        git commit -m "Update version to $VERSION" || echo "No changes to commit"
-        git push origin main
     
     - name: Build package
       run: |
