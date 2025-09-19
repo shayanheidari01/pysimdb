@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -26,7 +26,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.6"
-dynamic = ["version"]
+version = "0.1.0"
 dependencies = [
     "pysimdjson>=5.0.0",
 ]
@@ -46,7 +46,3 @@ Homepage = "https://github.com/shayanheidari01/pysimdb"
 
 [tool.setuptools]
 packages = ["pysimdb"]
-
-[tool.setuptools_scm]
-version_scheme = "guess-next-dev"
-local_scheme = "dirty-tag"

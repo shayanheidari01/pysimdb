@@ -24,11 +24,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install build twine setuptools-scm
     
-    - name: Get commit count for version
+    - name: Get commit count for semantic versioning
       id: get_version
       run: |
-        # Count commits on main branch for automatic versioning
+        # Count commits on main branch for semantic versioning
         COMMIT_COUNT=$(git rev-list --count HEAD)
+        # Use format MAJOR.MINOR.PATCH where PATCH is the commit count
         VERSION="0.1.$COMMIT_COUNT"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "Using version: $VERSION"
