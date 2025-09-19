@@ -1,4 +1,4 @@
-name: Auto Increment Version and Create Release
+name: Manual Version Increment and Create Release
 
 on:
   workflow_dispatch:

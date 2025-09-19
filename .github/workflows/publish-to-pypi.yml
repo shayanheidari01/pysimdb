@@ -1,8 +1,8 @@
 name: Publish Python Package to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -24,31 +24,25 @@ jobs:
         python -m pip install --upgrade pip
         pip install build twine
     
-    - name: Get release version
+    - name: Get commit count for versioning
       id: get_version
       run: |
-        # Get version from release tag
-        if [ "${{ github.event_name }}" = "release" ]; then
-          VERSION_TAG="${{ github.event.release.tag_name }}"
-        else
-          # For manual runs, get latest tag or default
-          VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
-        fi
-        
-        # Remove 'v' prefix if present
-        VERSION_WITHOUT_V=${VERSION_TAG#v}
-        echo "VERSION_WITHOUT_V=$VERSION_WITHOUT_V" >> $GITHUB_ENV
-        echo "Using version: $VERSION_WITHOUT_V"
+        # Count commits on main branch for semantic versioning
+        COMMIT_COUNT=$(git rev-list --count HEAD)
+        # Use format MAJOR.MINOR.COMMIT_COUNT
+        VERSION="0.1.$COMMIT_COUNT"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "Using version: $VERSION"
     
     - name: Update version in setup.py
       run: |
         # Update version in setup.py
-        sed -i "s/version=\"[^\"]*\"/version=\"$VERSION_WITHOUT_V\"/g" setup.py
+        sed -i "s/version=\"[^\"]*\"/version=\"$VERSION\"/g" setup.py
     
     - name: Update version in pyproject.toml
       run: |
         # Update version in pyproject.toml
-        sed -i "s/version = \"[^\"]*\"/version = \"$VERSION_WITHOUT_V\"/g" pyproject.toml
+        sed -i "s/version = \"[^\"]*\"/version = \"$VERSION\"/g" pyproject.toml
     
     - name: Build package
       run: |
