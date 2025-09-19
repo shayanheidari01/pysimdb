@@ -32,8 +32,6 @@ setuptools.setup(
         "Topic :: Database",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    package_dir={"": "."},
-    packages=setuptools.find_packages(where=".", include=["pysimdb", "pysimdb.*"]),
     python_requires=">=3.6",
     install_requires=[
         "pysimdjson>=5.0.0",

@@ -45,7 +45,7 @@ Homepage = "https://github.com/shayanheidari01/pysimdb"
 "Source Code" = "https://github.com/shayanheidari01/pysimdb"
 
 [tool.setuptools]
-packages = {find = {where = ".", include = ["pysimdb", "pysimdb.*"]}}
+packages = ["pysimdb"]
 
 [tool.setuptools_scm]
 version_scheme = "guess-next-dev"
