@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include *.txt
+include *.md
+recursive-include pysimdb *.py
+recursive-include tests *.py
+global-exclude __pycache__
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *~

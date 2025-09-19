@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysimdb"
+description = "A lightweight, JSON-based database library for Python"
+readme = "pypi_description.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Shayan Heidari", email = "shayanheidari01@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.6"
+dynamic = ["version"]
+dependencies = [
+    "pysimdjson>=5.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+]
+
+[project.urls]
+Homepage = "https://github.com/shayanheidari01/pysimdb"
+"Bug Tracker" = "https://github.com/shayanheidari01/pysimdb/issues"
+"Documentation" = "https://github.com/shayanheidari01/pysimdb#readme"
+"Source Code" = "https://github.com/shayanheidari01/pysimdb"
+
+[tool.setuptools]
+packages = {find = {where = ".", include = ["pysimdb", "pysimdb.*"]}}
+
+[tool.setuptools_scm]
+version_scheme = "guess-next-dev"
+local_scheme = "dirty-tag"
