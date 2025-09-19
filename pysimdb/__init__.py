@@ -10,3 +10,5 @@ __all__ = [
     "SchemaError",
     "TableSchema"
 ]
+
+__author__ = "Shayan Heidari [ShythonX]"
