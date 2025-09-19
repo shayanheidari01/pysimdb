@@ -1,6 +1,5 @@
 import os
 import json
-import shutil
 import tempfile
 from threading import Lock
 try:
