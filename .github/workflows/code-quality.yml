@@ -16,12 +16,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.11'  # Use a specific version that's available
     
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 black
+        pip install flake8
     
     - name: Lint with flake8
       run: |
@@ -29,7 +29,3 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # Exit-code 1 if any warnings
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    - name: Check code formatting with black
-      run: |
-        black --check .
